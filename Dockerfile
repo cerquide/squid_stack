@@ -2,12 +2,11 @@ FROM ubuntu/squid:latest
 
 # Install additional utilities
 RUN apt-get update && apt-get install -y \
-    apache2-utils \
     openssl \
     && rm -rf /var/lib/apt/lists/*
 
 # Create necessary directories
-RUN mkdir -p /etc/squid/certs /var/spool/squid /var/log/squid
+RUN mkdir -p /etc/squid/certs /var/spool/squid /var/log/squid /var/lib/squid/ssl_db
 
 # Copy Squid configuration
 COPY squid.conf /etc/squid/squid.conf
@@ -18,11 +17,10 @@ RUN openssl req -new -newkey rsa:2048 -days 3650 -nodes -x509 \
     -out /etc/squid/certs/squidCA.pem \
     -subj "/CN=Squid Proxy CA/O=Squid Proxy/C=US"
 
-# Initialize SSL certificate database for SSL bump
-RUN /usr/lib/squid/security_file_certgen -c -s /var/lib/squid/ssl_db -M 4MB
-
 # Set proper permissions
-RUN chown -R proxy:proxy /var/spool/squid /var/log/squid /etc/squid /var/lib/squid
+RUN chown -R proxy:proxy /var/spool/squid /var/log/squid /etc/squid /var/lib/squid || \
+    chown -R squid:squid /var/spool/squid /var/log/squid /etc/squid /var/lib/squid || \
+    true
 
 # Initialize cache directories
 RUN squid -z -N 2>&1 | grep -v "Creating missing" || true
