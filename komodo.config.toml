@@ -1,15 +1,15 @@
-# Komodo Configuration for Stack Test Web App
+# Komodo Configuration for Squid Proxy
 
 [[stack]]
-name = "stack_test"
+name = "squid_proxy"
 # Git repository configuration
 git_provider = "github"
 repo = "cerquide/stack_test"
 branch = "main"
 
 # Docker compose configuration
-compose_file = "docker-compose.yml"
-project_name = "stack_test"
+compose_file = "compose.yaml"
+project_name = "squid_proxy"
 
 # Server configuration
 [[stack.server]]

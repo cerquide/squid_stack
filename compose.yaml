@@ -1,16 +1,33 @@
 services:
-  web:
+  proxy:
     build: .
-    container_name: stack_test_web
+    container_name: squid_proxy
     ports:
-      - "8080:80"
+      - "3128:3128"      # Standard forward proxy port
+      # - "3129:3129"    # Optional: Uncomment for SSL bump port
     restart: unless-stopped
     environment:
-      - NGINX_HOST=localhost
-      - NGINX_PORT=80
+      - TZ=UTC
+    volumes:
+      # Persist cache data
+      - cache_data:/var/spool/squid
+      # Persist logs
+      - logs:/var/log/squid
     networks:
-      - web_network
+      - proxy_network
+    healthcheck:
+      test: ["CMD", "squid", "-k", "check"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
 networks:
-  web_network:
+  proxy_network:
     driver: bridge
+
+volumes:
+  cache_data:
+    driver: local
+  logs:
+    driver: local
