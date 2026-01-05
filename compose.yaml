@@ -1,0 +1,16 @@
+services:
+  web:
+    build: .
+    container_name: stack_test_web
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    environment:
+      - NGINX_HOST=localhost
+      - NGINX_PORT=80
+    networks:
+      - web_network
+
+networks:
+  web_network:
+    driver: bridge

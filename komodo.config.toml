@@ -1,0 +1,31 @@
+# Komodo Configuration for Stack Test Web App
+
+[[stack]]
+name = "stack_test"
+# Git repository configuration
+git_provider = "github"
+repo = "cerquide/stack_test"
+branch = "main"
+
+# Docker compose configuration
+compose_file = "docker-compose.yml"
+project_name = "stack_test"
+
+# Server configuration
+[[stack.server]]
+name = "default"
+
+# Optional: Environment variables
+[[stack.env]]
+# Add any environment variables here
+# Example: API_KEY = "your-api-key"
+
+# Optional: Build arguments
+[[stack.build_args]]
+# Add any build arguments here
+
+# Optional: Webhook configuration for auto-deployment
+# Note: Replace "your-webhook-secret" with a secure secret before deployment
+[[stack.webhook]]
+enabled = true
+secret = "your-webhook-secret"  # TODO: Replace with actual secret
